@@ -79,3 +79,48 @@ wss.on("connection", function(ws) {
     clearInterval(id)
   })
 })
+
+app.get('/ticketlogs', function (req, res) {
+  console.log('I received a GET request');
+
+  db.ticketlogs.find(function (err, docs) {
+    console.log(docs);
+    res.json(docs);
+  });
+});
+
+
+app.post('/ticketlogs', function (req, res) {
+  console.log(req.body);
+  db.ticketlogs.insert(req.body, function(err, doc) {
+    res.json(doc);
+  });
+});
+
+app.delete('/ticketlogs/:id', function (req, res) {
+  var id = req.params.id;
+  console.log(id);
+  db.ticketlogs.remove({_id: mongojs.ObjectId(id)}, function (err, doc) {
+    res.json(doc);
+  });
+});
+
+app.get('/ticketlogs/:id', function (req, res) {
+  var id = req.params.id;
+  console.log(id);
+  db.ticketlogs.findOne({_id: mongojs.ObjectId(id)}, function (err, doc) {
+    res.json(doc);
+  });
+});
+
+app.put('/ticketlogs/:id', function (req, res) {
+  var id = req.params.id;
+  console.log(req.body.name);
+  db.ticketlogs.findAndModify({
+    query: {_id: mongojs.ObjectId(id)},
+    update: {$set: {c_info: req.body.c_info, comments: req.body.comments, createdBy: req.body.createdBy, assignedTo: req.body.assignedTo, status: req.body.status}},
+    new: true}, function (err, doc) {
+      res.json(doc);
+    }
+  );
+});
