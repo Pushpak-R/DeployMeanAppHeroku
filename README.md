@@ -1,18 +1,16 @@
-# Node.js Websocket Test
+Simple mean app to run this app you need to follow these steps:
 
-A tiny demo using the [einaros/ws](http://einaros.github.io/ws/) WebSockets implementation.
+1: First install node and mongodb.
 
-# Running Locally
+2: run mongodb.
 
-``` bash
-npm install
-npm start
-```
+3: run command "npm install" from Node.Js command prompt inside the project.
 
-# Running on Heroku
+4: run command "node server.js".
 
-``` bash
-heroku create
-git push heroku master
-heroku open
-```
+5: this app is running at port:3000 on browser open localhost:3000.
+
+
+That's all for now.
+
+Thanks.

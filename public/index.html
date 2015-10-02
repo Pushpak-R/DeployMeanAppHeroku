@@ -1,0 +1,60 @@
+<!DOCTYPE>
+<html ng-app="myApp">
+<head>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+
+  <title>Contact List App</title>
+  <style>
+      td{
+        border:2px solid #808080;
+      }
+      button{
+        float:right;
+      }
+  </style>
+</head>
+<body>
+  <div class="container" ng-controller="AppCtrl">
+    <h1>Ticketing System App</h1>
+    <h3>Select Areas</h3>
+    <select style="width:100px;" class="form-control" ng-options="a for a in area" ng-model="selectedArea"></select>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Customer Info</th>         
+          <th>Comments</th>
+          <th>Created By</th>
+          <th>Assigned To</th>
+          <th>Status</th>
+          <th>&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input class="form-control" ng-model="ticket.c_info"></td>
+          <td><input class="form-control" ng-model="ticket.comments"></td>
+          <td><input class="form-control" ng-model="ticket.createdBy"></td>
+          <td><select class="form-control" ng-options="operator.name for operator in operators" ng-model="ticket.assignedTo"></select></td>
+          <td><select class="form-control" ng-options="status for status in statusList" ng-model="ticket.status"></select></td>
+          <td><button class="btn btn-primary" ng-click="logTicket()">Log Ticket</button></td>
+        </tr>
+        <tr ng-repeat="ticket in ticketlist | filter:selectedArea">
+          <td><span>{{ticket.c_info}}</span></td>
+          <td><span ng-hide="ticketEdit === $index">{{ticket.comments}}</span><input ng-show="ticketEdit === $index" ng-model="ticket.comments"></input></td>
+          <td><span>{{ticket.createdBy}}</span></input></td>
+          <td><span ng-hide="ticketEdit === $index && ticket.assignedTo === undefined">{{ticket.assignedTo}}</span><select class="form-control" ng-show="ticketEdit === $index && ticket.assignedTo === undefined" ng-options="operator.name for operator in operators" ng-model="$parent.assignedTo[$index]" ng-change="$parent.status[$index] = 'Closed'"></select></td>
+          <td><span ng-hide="ticketEdit === $index">{{ticket.status}}</span><select class="form-control" ng-show="ticketEdit === $index" ng-options="status for status in statusList" ng-model="$parent.status[$index]"></select></td>
+          <td><button class="btn btn-danger" ng-click="ticketEdit = $index;$parent.status[$index]=ticket.status" ng-disabled="{{ticket.assignedTo !== undefined}}">Edit</button></td>
+          <td><button class="btn btn-danger" ng-click="update(ticket._id,$index)" ng-disabled="{{ticket.assignedTo !== undefined}}">Update</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.12/angular.min.js"></script>
+<script src="controllers/controller.js"></script>
+</body>
+</html>

@@ -1,58 +1,64 @@
-var WebSocketServer = require("ws").Server
-var http = require("http")
-var express = require("express")
-var mongoose = require('mongoose')
-var app = express()
-var port = process.env.PORT || 5000
+// MEAN Stack RESTful API Tutorial - Contact List App
 
-app.use(express.static(__dirname + "/"))
+var express = require('express');
+var app = express();
+var mongojs = require('mongojs');
+var db = mongojs('ticketlist', ['ticketlist']);
+var bodyParser = require('body-parser');
 
-var server = http.createServer(app)
-server.listen(port)
-
-console.log("http server listening on %d", port)
+app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.json());
 
 
 
- var Schema = new mongoose.Schema({
-      id       : String, 
-      title    : String,
-      completed: Boolean
-    }),
+db.ticketlist.remove();
 
- var ticketslog = mongoose.model('TicketsLog', Schema);
 
-mongoose.connect(process.env.MONGOLAB_URI, function (error) {
-    if (error) console.error(error);
-    else console.log('mongo connected');
+
+app.get('/ticketlist', function (req, res) {
+  console.log('I received a GET request');
+
+  db.ticketlist.find(function (err, docs) {
+    console.log(docs);
+    res.json(docs);
+  });
 });
 
 
+app.post('/ticketlist', function (req, res) {
+  console.log(req.body);
+  db.ticketlist.insert(req.body, function(err, doc) {
+    res.json(doc);
+  });
+});
 
+app.delete('/ticketlist/:id', function (req, res) {
+  var id = req.params.id;
+  console.log(id);
+  db.ticketlist.remove({_id: mongojs.ObjectId(id)}, function (err, doc) {
+    res.json(doc);
+  });
+});
 
+app.get('/ticketlist/:id', function (req, res) {
+  var id = req.params.id;
+  console.log(id);
+  db.ticketlist.findOne({_id: mongojs.ObjectId(id)}, function (err, doc) {
+    res.json(doc);
+  });
+});
 
+app.put('/ticketlist/:id', function (req, res) {
+  var id = req.params.id;
+  console.log(req.body.name);
+  db.ticketlist.findAndModify({
+    query: {_id: mongojs.ObjectId(id)},
+    update: {$set: {c_info: req.body.c_info, comments: req.body.comments, createdBy: req.body.createdBy, assignedTo: req.body.assignedTo, status: req.body.status}},
+    new: true}, function (err, doc) {
+      res.json(doc);
+    }
+  );
+});
 
-
-
-
-
-
-
-
-
-
-var wss = new WebSocketServer({server: server})
-console.log("websocket server created")
-
-wss.on("connection", function(ws) {
-  var id = setInterval(function() {
-    ws.send(JSON.stringify(new Date()), function() {  })
-  }, 1000)
-
-  console.log("websocket connection open")
-
-  ws.on("close", function() {
-    console.log("websocket connection close")
-    clearInterval(id)
-  })
-})
+app.listen(3000);
+console.log("Server running on port 3000");
