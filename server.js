@@ -83,14 +83,14 @@ wss.on("connection", function(ws) {
 app.get('/ticketlogs', function (req, res) {
   console.log('I received a GET request');
 
-  db.ticketlogs.find(function (err, docs) {
+  ticketlogs.find(function (err, docs) {
     console.log(docs);
     res.json(docs);
   });
 });
 
 
-app.post('/ticketlogs', function (req, res) {
+/*app.post('/ticketlogs', function (req, res) {
   console.log(req.body);
   db.ticketlogs.insert(req.body, function(err, doc) {
     res.json(doc);
@@ -123,4 +123,4 @@ app.put('/ticketlogs/:id', function (req, res) {
       res.json(doc);
     }
   );
-});
+});*/
