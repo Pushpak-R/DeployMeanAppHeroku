@@ -1,4 +1,4 @@
-/*var express = require('express');
+var express = require('express');
 var app = express();
 
 // set the port of our application
@@ -30,13 +30,13 @@ var port = process.env.PORT || 5000
 
 
 // Mongoose Schema definition
-    Schema = new mongoose.Schema({
+   /* Schema = new mongoose.Schema({
       id       : String, 
       title    : String,
       completed: Boolean
     }),
 
-    Todo = mongoose.model('TicketLogs', Schema);
+    ticketlogs = mongoose.model('TicketLogs', Schema);*/
 
 /*
  * I’m sharing my credential here.
@@ -47,13 +47,13 @@ var port = process.env.PORT || 5000
  * MONGOLAB_URI=mongodb://example:example@ds053312.mongolab.com:53312/todolist
  * 'mongodb://example:example@ds053312.mongolab.com:53312/todolist'
  */
-mongoose.connect(process.env.MONGOLAB_URI, function (error) {
+/*mongoose.connect(process.env.MONGOLAB_URI, function (error) {
     if (error) console.error(error);
     else console.log('mongo connected');
 });
 
 app.use(bodyParser.json()) // support json encoded bodies
-app.use(bodyParser.urlencoded({ extended: true })) // support encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })) // support encoded bodies*/
 
 
 
@@ -80,14 +80,14 @@ wss.on("connection", function(ws) {
   })
 })
 
-app.get('/ticketlogs', function (req, res) {
+/*app.get('/ticketlogs', function (req, res) {
   console.log('I received a GET request');
 
   ticketlogs.find(function (err, docs) {
     console.log(docs);
     res.json(docs);
   });
-});
+});*/
 
 
 /*app.post('/ticketlogs', function (req, res) {
@@ -123,4 +123,4 @@ app.put('/ticketlogs/:id', function (req, res) {
       res.json(doc);
     }
   );
-});*/
+});
